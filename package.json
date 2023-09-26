@@ -1,8 +1,8 @@
 {
-  "name": "",
-  "version": "",
-  "description": "",
-  "author": "",
+  "name": "shortstack_twotier_webapp",
+  "version": "0.1.0",
+  "description": "WPI CS 4241 second assignment",
+  "author": "Nandita Kumar",
   "scripts": {
     "start": "node server.improved.js"
   },

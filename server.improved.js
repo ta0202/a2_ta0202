@@ -8,16 +8,14 @@ const http = require( 'http' ),
       dir  = 'public/',
       port = 3000
 
-const appdata = [
-  { 'model': 'toyota', 'year': 1999, 'mpg': 23 },
-  { 'model': 'honda', 'year': 2004, 'mpg': 30 },
-  { 'model': 'ford', 'year': 1987, 'mpg': 14} 
+const todos = [
+  { 'task': 'toyota', 'due': '09/14/2023' },
 ]
 
-const server = http.createServer( function( request,response ) {
-  if( request.method === 'GET' ) {
-    handleGet( request, response )    
-  }else if( request.method === 'POST' ){
+const server = http.createServer( function( request,response ) { //what function do you wanna call whenever the client makes a request to the server
+  if( request.method === 'GET' ) { //4 built in methods to http servers -= POST, GET, DELETE, PUT
+    handleGet( request, response )     //fetch looks at currently loadaed page, sends input as client request (only runs on client)
+  }else if( request.method === 'POST' ){ //GET is the default when trying to load a page
     handlePost( request, response ) 
   }
 })
@@ -25,7 +23,7 @@ const server = http.createServer( function( request,response ) {
 const handleGet = function( request, response ) {
   const filename = dir + request.url.slice( 1 ) 
 
-  if( request.url === '/' ) {
+  if( request.url === '/' ) { //nothing extra in the url
     sendFile( response, 'public/index.html' )
   }else{
     sendFile( response, filename )
@@ -37,15 +35,19 @@ const handlePost = function( request, response ) {
 
   request.on( 'data', function( data ) {
       dataString += data 
-  })
+  }) //this part mashes received data together (handles if it gets split into different packages)
 
   request.on( 'end', function() {
-    console.log( JSON.parse( dataString ) )
+    //get data that's been sent up to server
+    //parse (convert stringified data back to js object)
+    //push back to appdata array
+    todos.push(JSON.parse(dataString))
+    
 
     // ... do something with the data here!!!
 
-    response.writeHead( 200, "OK", {'Content-Type': 'text/plain' })
-    response.end('test')
+    response.writeHead( 200, "OK", {'Content-Type': 'text/json' }) //changed from response.writeHead( 200, "OK", {'Content-Type': 'text/plain' })
+    response.end(JSON.stringify( todos )) //changed from response.end('test')
   })
 }
 
